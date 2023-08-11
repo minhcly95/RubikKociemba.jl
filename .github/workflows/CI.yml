@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.0'
+          - '1.6'
           - '1.9'
           - 'nightly'
         os:
@@ -32,5 +32,12 @@ jobs:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
       - uses: julia-actions/cache@v1
+        with:
+          cache-registries: "true"
+      - name: "Add the Private registry via Git"
+        run: |
+          import Pkg
+          Pkg.Registry.add(Pkg.RegistrySpec(url="https://github.com/minhcly95/JuliaRegistry.git"))
+        shell: julia --color=yes {0}
       - uses: julia-actions/julia-buildpkg@v1
       - uses: julia-actions/julia-runtest@v1
