@@ -1,6 +1,7 @@
 using RubikKociemba
 using Test
+using RubikCore
 
 @testset "RubikKociemba.jl" begin
-    # Write your tests here.
+    include("hcoset.jl")
 end
