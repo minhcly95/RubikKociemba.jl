@@ -1,4 +1,4 @@
-N_BELTSLOTS = 495      # 495 = 12C4
+const N_BELTSLOTS = 495      # 495 = 12C4
 
 # Represent which edges are in the belt slots (middle layer)
 RubikCore.@define_int_struct(BeltSlot, UInt16, N_BELTSLOTS)

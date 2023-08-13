@@ -1,4 +1,4 @@
-N_CORNERORIS = 2187      # 2187 = 3^7
+const N_CORNERORIS = 2187      # 2187 = 3^7
 
 # Represent the orientation of all corners
 RubikCore.@define_int_struct(CornerOri, UInt16, N_CORNERORIS)

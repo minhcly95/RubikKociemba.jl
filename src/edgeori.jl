@@ -1,4 +1,4 @@
-N_EDGEORIS = 2048      # 2048 = 2^11
+const N_EDGEORIS = 2048      # 2048 = 2^11
 
 # Represent the orientation of all edges
 RubikCore.@define_int_struct(EdgeOri, UInt16, N_EDGEORIS)
