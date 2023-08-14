@@ -1,7 +1,7 @@
 name = "RubikKociemba"
 uuid = "149dba96-27df-4b68-bde6-b18903c8d25e"
 authors = ["Bui Quang Minh <minhcly95@outlook.com> and contributors"]
-version = "0.1.0-DEV.1"
+version = "0.1.0-DEV.2"
 
 [deps]
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"

@@ -14,11 +14,12 @@ include("cornerori.jl")
 include("edgeori.jl")
 
 include("hcoset.jl")
+include("permcube.jl")
 include("canon.jl")
 
 include("random.jl")
 
 export Perm4, CornerSlot, EdgeSlot, CornerOri, EdgeOri, expand, permute
-export HCoset
+export HCoset, PermCube
 
 end

@@ -7,4 +7,5 @@ using RubikCore
     include("cornerslot.jl")
     include("edgeslot.jl")
     include("hcoset.jl")
+    include("permcube.jl")
 end
