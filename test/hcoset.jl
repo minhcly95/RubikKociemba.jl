@@ -30,13 +30,13 @@
             cornerori = @inbounds CornerOri(co)
             bits = @inbounds(_CORNERORI_CANONINFO[co]).min_bits
             if bits == 1
-                count += N_EDGEORIS * N_BELTSLOTS
+                count += N_EDGEORIS * N_EDGESLOTS
             elseif bits & 1 > 0
                 for eo in 1:N_EDGEORIS
                     edgeori = @inbounds EdgeOri(eo)
-                    for slot in 1:N_BELTSLOTS
-                        beltslot = @inbounds BeltSlot(slot)
-                        coset = HCoset(cornerori, edgeori, beltslot)
+                    for slot in 1:N_EDGESLOTS
+                        midslot = @inbounds EdgeSlot(slot)
+                        coset = HCoset(cornerori, edgeori, midslot)
                         canon = canonicalize(coset)
                         (coset == canon) && (count += 1)
                     end

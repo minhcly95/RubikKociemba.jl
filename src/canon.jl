@@ -1,21 +1,21 @@
 # Define an order
 Base.isless(a::CornerOri, b::CornerOri) = Int(a) < Int(b)
 Base.isless(a::EdgeOri, b::EdgeOri) = Int(a) < Int(b)
-Base.isless(a::BeltSlot, b::BeltSlot) = Int(a) < Int(b)
+Base.isless(a::EdgeSlot, b::EdgeSlot) = Int(a) < Int(b)
 
 Base.isless(a::HCoset, b::HCoset) =
-    a.corner_ori < b.corner_ori || a.corner_ori == b.corner_ori &&
-    (a.edge_ori < b.edge_ori || a.edge_ori == b.edge_ori && a.belt_slot < b.belt_slot)
+    a.cornerori < b.cornerori || a.cornerori == b.cornerori &&
+    (a.edgeori < b.edgeori || a.edgeori == b.edgeori && a.midslot < b.midslot)
 
 # Symmatry of HCoset and HCube
 const N_HSYMMS = 16
 const ALL_HSYMMS = Tuple(Symm(s) for s in 1:N_HSYMMS)
 
 function RubikCore.canonicalize(hcoset::HCoset)
-    canoninfo = @inbounds _CORNERORI_CANONINFO[Int(hcoset.corner_ori)]
+    canoninfo = @inbounds _CORNERORI_CANONINFO[Int(hcoset.cornerori)]
     co = canoninfo.canon_co
-    eo = _rotate_edgeori(canoninfo.min_symm, hcoset.edge_ori, hcoset.belt_slot)
-    slot = @inbounds _BELTSLOT_ROTATE[Int(hcoset.belt_slot)][Int(canoninfo.min_symm)]
+    eo = _rotate_edgeori(canoninfo.min_symm, hcoset.edgeori, hcoset.midslot)
+    slot = @inbounds _MIDSLOT_ROTATE[Int(hcoset.midslot)][Int(canoninfo.min_symm)]
 
     min_bits = canoninfo.min_bits >> (Int(canoninfo.min_symm) - 1)
     for s in Int(canoninfo.min_symm)+1:N_HSYMMS
@@ -23,9 +23,9 @@ function RubikCore.canonicalize(hcoset::HCoset)
         min_bits >>= 1
         if min_bits & 1 > 0
             symm = @inbounds Symm(s)
-            eo2 = _rotate_edgeori(symm, hcoset.edge_ori, hcoset.belt_slot)
+            eo2 = _rotate_edgeori(symm, hcoset.edgeori, hcoset.midslot)
             (eo2 > eo) && continue
-            slot2 = @inbounds _BELTSLOT_ROTATE[Int(hcoset.belt_slot)][s]
+            slot2 = @inbounds _MIDSLOT_ROTATE[Int(hcoset.midslot)][s]
             if eo2 < eo  || slot2 < slot
                 eo = eo2
                 slot = slot2
@@ -71,34 +71,35 @@ function _make_cornerori_canoninfo()
 end
 const _CORNERORI_CANONINFO = _make_cornerori_canoninfo()
 
-# EdgeOri and BeltSlot rotation
+# EdgeOri and EdgeSlot rotation
 const _EDGEORI_ROTATE = Tuple(Tuple(EdgeOri(Cube(rotate(Move(Cube(EdgeOri(eo))), symm))) for symm in ALL_HSYMMS) for eo in 1:N_EDGEORIS)
 
-function _make_beltslot_rotate()
-    beltslot_rotate = Matrix{BeltSlot}(undef, N_BELTSLOTS, N_HSYMMS)
-    beltslot_oriflip = Vector{EdgeOri}(undef, N_BELTSLOTS)
+function _make_midslot_rotate()
+    midslot_rotate = Matrix{EdgeSlot}(undef, N_EDGESLOTS, N_HSYMMS)
+    midslot_oriflip = Vector{EdgeOri}(undef, N_EDGESLOTS)
 
-    for i in 1:N_BELTSLOTS
-        slot = BeltSlot(i)
-        move = Move(Cube(slot))
+    for i in 1:N_EDGESLOTS
+        mid = EdgeSlot(i)
+        up, down = opposite(mid)
+        move = Move(Cube(up, mid, down, Perm4(), Perm4(), Perm4()))
 
         for symm in ALL_HSYMMS
             rot_cube = Cube(rotate(move, symm))
-            slot2 = BeltSlot(rot_cube)
-            beltslot_rotate[Int(slot), Int(symm)] = slot2
+            mid2 = EdgeSlot(rot_cube, :mid)
+            midslot_rotate[Int(mid), Int(symm)] = mid2
             if Int(symm) == 9
-                beltslot_oriflip[Int(slot2)] = EdgeOri(rot_cube)
+                midslot_oriflip[Int(mid2)] = EdgeOri(rot_cube)
             end
         end
     end
 
-    return Tuple(Tuple.(eachrow(beltslot_rotate))), Tuple(beltslot_oriflip)
+    return Tuple(Tuple.(eachrow(midslot_rotate))), Tuple(midslot_oriflip)
 end
-const _BELTSLOT_ROTATE, _BELTSLOT_ORIFLIP = _make_beltslot_rotate()
+const _MIDSLOT_ROTATE, _MIDSLOT_ORIFLIP = _make_midslot_rotate()
 
-@inline function _rotate_edgeori(symm::Symm, eo::EdgeOri, slot::BeltSlot)
+@inline function _rotate_edgeori(symm::Symm, eo::EdgeOri, slot::EdgeSlot)
     high_symm = Int(symm) >= 9
     eo_val = Int(eo) - 1
-    eo_val ⊻= (Int(@inbounds(_BELTSLOT_ORIFLIP[Int(slot)])) - 1) * high_symm
+    eo_val ⊻= @inbounds (Int(_MIDSLOT_ORIFLIP[Int(slot)]) - 1) * high_symm
     return @inbounds _EDGEORI_ROTATE[eo_val + 1][Int(symm)]
 end
