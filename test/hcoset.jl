@@ -43,6 +43,6 @@
                 end
             end
         end
-        @test count == 138639780
+        @test count == N_CANON_HCOSETS
     end
 end

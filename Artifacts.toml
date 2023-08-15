@@ -1,0 +1,6 @@
+[LookupTables]
+git-tree-sha1 = "f799f2add010b4b0e93d8531f44b7126e585d912"
+
+    [[LookupTables.download]]
+    sha256 = "9d3c9cdb2c98ed6f433edc630dead308a0de4e6c675750615610f19eda2bdfae"
+    url = "https://rubik-kociemba-jl.s3.us-east-2.amazonaws.com/lookuptables.tar.gz"

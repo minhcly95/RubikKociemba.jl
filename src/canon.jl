@@ -11,11 +11,12 @@ Base.isless(a::HCoset, b::HCoset) =
 const N_HSYMMS = 16
 const ALL_HSYMMS = Tuple(Symm(s) for s in 1:N_HSYMMS)
 
-function RubikCore.canonicalize(hcoset::HCoset)
+function RubikCore.canonicalize(hcoset::HCoset, ::Type{Symm})
     canoninfo = @inbounds _CORNERORI_CANONINFO[Int(hcoset.cornerori)]
-    co = canoninfo.canon_co
+    co = @inbounds _CORNERORI_ALLCANON[canoninfo.index]
     eo = _rotate_edgeori(canoninfo.min_symm, hcoset.edgeori, hcoset.midslot)
     slot = @inbounds _MIDSLOT_ROTATE[Int(hcoset.midslot)][Int(canoninfo.min_symm)]
+    min_symm = canoninfo.min_symm
 
     min_bits = canoninfo.min_bits >> (Int(canoninfo.min_symm) - 1)
     for s in Int(canoninfo.min_symm)+1:N_HSYMMS
@@ -29,16 +30,18 @@ function RubikCore.canonicalize(hcoset::HCoset)
             if eo2 < eo  || slot2 < slot
                 eo = eo2
                 slot = slot2
+                min_symm = symm
             end
         end
     end
 
-    return HCoset(co, eo, slot)
+    return HCoset(co, eo, slot), min_symm
 end
+RubikCore.canonicalize(hcoset::HCoset) = @inbounds canonicalize(hcoset, Symm)[1]
 
 # CornerOri canonicalization
 struct CornerOriCanonInfo
-    canon_co::CornerOri
+    index::UInt8
     min_symm::Symm
     min_bits::UInt16
 end
@@ -47,6 +50,7 @@ const N_CANON_CORNERORIS = 168
 
 function _make_cornerori_canoninfo()
     canoninfo = CornerOriCanonInfo[]
+    all_canon = CornerOri[]
     for i in 1:N_CORNERORIS
         co = CornerOri(i)
         move = Move(Cube(co))
@@ -64,12 +68,20 @@ function _make_cornerori_canoninfo()
                 min_bits |= 1 << (s-1)
             end
         end
-        push!(canoninfo, CornerOriCanonInfo(CornerOri(canon_co), min_symm, min_bits))
+
+        local index
+        if canon_co == i
+            index = length(all_canon) + 1
+            push!(all_canon, co)
+        else
+            index = canoninfo[canon_co].index
+        end
+        push!(canoninfo, CornerOriCanonInfo(index, min_symm, min_bits))
     end
-    @assert length(unique!(map(info -> info.canon_co, canoninfo))) == N_CANON_CORNERORIS
-    return Tuple(canoninfo)
+    @assert length(all_canon) == N_CANON_CORNERORIS
+    return Tuple(canoninfo), Tuple(all_canon)
 end
-const _CORNERORI_CANONINFO = _make_cornerori_canoninfo()
+const _CORNERORI_CANONINFO, _CORNERORI_ALLCANON = _make_cornerori_canoninfo()
 
 # EdgeOri and EdgeSlot rotation
 const _EDGEORI_ROTATE = Tuple(Tuple(EdgeOri(Cube(rotate(Move(Cube(EdgeOri(eo))), symm))) for symm in ALL_HSYMMS) for eo in 1:N_EDGEORIS)

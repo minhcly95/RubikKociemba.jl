@@ -1,5 +1,5 @@
 using RubikKociemba
-using RubikKociemba: N_CORNERORIS, N_EDGEORIS, N_EDGESLOTS, ALL_HSYMMS, _CORNERORI_CANONINFO
+using RubikKociemba: N_CORNERORIS, N_EDGEORIS, N_EDGESLOTS, ALL_HSYMMS, _CORNERORI_CANONINFO, N_CANON_HCOSETS
 using Test
 using RubikCore
 
@@ -8,4 +8,5 @@ using RubikCore
     include("edgeslot.jl")
     include("hcoset.jl")
     include("permcube.jl")
+    include("phase1.jl")
 end
