@@ -1,0 +1,13 @@
+name = "RubikKociemba"
+uuid = "0d8d6bde-c220-446d-9ce6-9f4c0ad5239b"
+authors = ["Bui Quang Minh <minhcly95@outlook.com> and contributors"]
+version = "0.1.0-DEV"
+
+[compat]
+julia = "1.10"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
