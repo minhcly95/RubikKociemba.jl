@@ -26,7 +26,7 @@ Base.one(::EdgeOri) = EdgeOri()
 
 # Make a Cube from EdgeOri (without changing the permutation)
 # Note: not performance critical
-function Cube(eori::EdgeOri; seed::Cube=Cube())
+function RubikCore.Cube(eori::EdgeOri; seed::Cube=Cube())
     estate = seed.edges
     eo = Int(eori) - 1
 
@@ -46,4 +46,11 @@ function Cube(eori::EdgeOri; seed::Cube=Cube())
 end
 
 _set_edge_ori(estate, i, ori) = @inbounds (ori == (estate.perm[2i] & 1)) ? estate : flip_edge(estate, i)
+
+# Only left multiplication is allowed (because we only consider left cosets)
+Base.:*(m::AbstractMove, eo::EdgeOri) = EdgeOri(Cube(m) * Cube(eo))
+
+# Results for FaceTurn are cached
+const EDGEORI_MUL = Tuple(Tuple(Move(ft) * eo for ft in ALL_FACETURNS) for eo in instances(EdgeOri))
+Base.:*(ft::FaceTurn, eo::EdgeOri) = @inbounds EDGEORI_MUL[eo][ft]
 

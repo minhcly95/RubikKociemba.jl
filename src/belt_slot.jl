@@ -59,7 +59,7 @@ Base.one(::BeltSlot) = BeltSlot()
 
 # Make a Cube from BeltSlot (orientation is not preserved)
 # Note: not performance critical
-function Cube(belt::BeltSlot; seed::Cube=Cube())
+function RubikCore.Cube(belt::BeltSlot; seed::Cube=Cube())
     estate = seed.edges
 
     seed_mask = @inbounds BELTSLOT_TO_MASK[BeltSlot(seed)]
@@ -91,4 +91,11 @@ function Cube(belt::BeltSlot; seed::Cube=Cube())
 
     return Cube(seed.center, estate, seed.corners)
 end
+
+# Only left multiplication is allowed (because we only consider left cosets)
+Base.:*(m::AbstractMove, belt::BeltSlot) = BeltSlot(Cube(m) * Cube(belt))
+
+# Results for FaceTurn are cached
+const BELTSLOT_MUL = Tuple(Tuple(Move(ft) * belt for ft in ALL_FACETURNS) for belt in instances(BeltSlot))
+Base.:*(ft::FaceTurn, belt::BeltSlot) = @inbounds BELTSLOT_MUL[belt][ft]
 

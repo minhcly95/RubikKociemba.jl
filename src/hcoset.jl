@@ -18,11 +18,22 @@ Base.one(::HCoset) = HCoset()
 
 # Make a Cube from HCoset
 # Note: not performance critical
-function Cube(coset::HCoset; seed::Cube=Cube())
+function RubikCore.Cube(coset::HCoset; seed::Cube=Cube())
     # Cube(::BeltSlot) destroys the orientations, so we must call it first
     seed = Cube(coset.belt_slot; seed)
     seed = Cube(coset.edge_ori; seed)
     seed = Cube(coset.corner_ori; seed)
     return seed
+end
+
+# Only left multiplication is allowed (because we only consider left cosets)
+Base.:*(m::AbstractMove, coset::HCoset) = HCoset(Cube(m) * Cube(coset))
+Base.:*(ft::FaceTurn, coset::HCoset) = HCoset(ft * coset.corner_ori, ft * coset.edge_ori, ft * coset.belt_slot)
+
+function Base.:*(ms::AbstractVector{<:AbstractMove}, coset::HCoset)
+    for m in Iterators.reverse(ms)
+        coset = m * coset
+    end
+    return coset
 end
 

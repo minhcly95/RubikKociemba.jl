@@ -27,7 +27,7 @@ Base.one(::CornerOri) = CornerOri()
 
 # Make a Cube from CornerOri (without changing the permutation)
 # Note: not performance critical
-function Cube(cori::CornerOri; seed::Cube=Cube())
+function RubikCore.Cube(cori::CornerOri; seed::Cube=Cube())
     cstate = seed.corners
     co = Int(cori) - 1
 
@@ -47,4 +47,11 @@ function Cube(cori::CornerOri; seed::Cube=Cube())
 end
 
 _set_corner_ori(cstate, i, ori) = @inbounds twist_corner(cstate, i, ori - cstate.perm[3i])
+
+# Only left multiplication is allowed (because we only consider left cosets)
+Base.:*(m::AbstractMove, co::CornerOri) = CornerOri(Cube(m) * Cube(co))
+
+# Results for FaceTurn are cached
+const CORNERORI_MUL = Tuple(Tuple(Move(ft) * co for ft in ALL_FACETURNS) for co in instances(CornerOri))
+Base.:*(ft::FaceTurn, co::CornerOri) = @inbounds CORNERORI_MUL[co][ft]
 
