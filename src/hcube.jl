@@ -32,3 +32,25 @@ function RubikCore.Cube(hc::HCube)
     return seed
 end
 
+# Not all moves are valid for HCube.
+# Only HTurn multiplication is allowed.
+Base.:*(hc::HCube, ht::HTurn) = HCube(hc.corner_perm * ht, hc.updown_perm * ht, hc.belt_perm * ht)
+
+function Base.:*(hc::HCube, hts::AbstractVector{HTurn})
+    for ht in hts
+        hc *= ht
+    end
+    return hc
+end
+
+# HCube is a subgroup, so multiplication and inversion are also possible
+# Note: not as performant as Cube, since the primary purpose of HCube is indexing
+Base.:*(a::HCube, b::HCube) = HCube(
+    a.corner_perm * b.corner_perm,
+    a.updown_perm * b.updown_perm,
+    a.belt_perm * b.belt_perm
+)
+
+Base.inv(hc::HCube) = HCube(inv(hc.corner_perm), inv(hc.updown_perm), inv(hc.belt_perm))
+Base.adjoint(hc::HCube) = inv(hc)
+

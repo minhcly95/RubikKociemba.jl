@@ -39,3 +39,22 @@ function RubikCore.Cube(cperm::CornerPerm; seed::Cube=Cube())
     return Cube(seed.center, seed.edges, CornerState(regrouped))
 end
 
+# Not all moves are valid for HCube.
+# Only HTurn multiplication is allowed.
+const CORNERPERM_MUL = Tuple(Tuple(CornerPerm(Cube(cp) * Cube(ht)) for ht in ALL_HTURNS) for cp in instances(CornerPerm))
+Base.:*(cp::CornerPerm, ht::HTurn) = @inbounds CORNERPERM_MUL[cp][ht]
+
+# HCube is a subgroup, so multiplication and inversion are also possible
+function Base.:*(a::CornerPerm, b::CornerPerm)
+    aperm = @inbounds LEHMER_TO_PERM_8[a]
+    bperm = @inbounds LEHMER_TO_PERM_8[b]
+    cperm = aperm * bperm
+    return @inbounds CornerPerm(lehmer_code(cperm))
+end
+
+function Base.inv(a::CornerPerm)
+    aperm = @inbounds LEHMER_TO_PERM_8[a]
+    cperm = inv(aperm)
+    return @inbounds CornerPerm(lehmer_code(cperm))
+end
+

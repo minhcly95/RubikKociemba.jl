@@ -11,6 +11,8 @@ import RubikCore:
     edge_ori, corner_ori, edge_perm, corner_perm,
     flip_edge, twist_corner, swap_edges
 
+include("hturn.jl")
+
 include("corner_ori.jl")
 include("edge_ori.jl")
 include("belt_slot.jl")
@@ -24,6 +26,7 @@ include("hcube.jl")
 
 include("random.jl")
 
+export HTurn
 export HCoset, HCube
 
 end

@@ -49,3 +49,22 @@ function RubikCore.Cube(bperm::BeltPerm; seed::Cube=Cube())
     return Cube(seed.center, EdgeState(final), seed.corners)
 end
 
+# Not all moves are valid for HCube.
+# Only HTurn multiplication is allowed.
+const BELTPERM_MUL = Tuple(Tuple(BeltPerm(Cube(bp) * Cube(ht)) for ht in ALL_HTURNS) for bp in instances(BeltPerm))
+Base.:*(bp::BeltPerm, ht::HTurn) = @inbounds BELTPERM_MUL[bp][ht]
+
+# HCube is a subgroup, so multiplication and inversion are also possible
+function Base.:*(a::BeltPerm, b::BeltPerm)
+    aperm = @inbounds LEHMER_TO_PERM_4[a]
+    bperm = @inbounds LEHMER_TO_PERM_4[b]
+    cperm = aperm * bperm
+    return @inbounds BeltPerm(lehmer_code(cperm))
+end
+
+function Base.inv(a::BeltPerm)
+    aperm = @inbounds LEHMER_TO_PERM_4[a]
+    cperm = inv(aperm)
+    return @inbounds BeltPerm(lehmer_code(cperm))
+end
+

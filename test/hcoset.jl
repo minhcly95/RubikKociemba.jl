@@ -3,10 +3,10 @@
         @test HCoset(Cube()) == HCoset()
     end
 
-    @testset "Invariant under HMove" begin
+    @testset "Invariant under HTurn" begin
         for cube in rand(Cube, 100)
             coset = HCoset(cube)
-            for m in HMOVES
+            for m in ALL_HTURNS
                 @test HCoset(cube * m) == coset
             end
         end

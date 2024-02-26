@@ -52,3 +52,22 @@ function RubikCore.Cube(udperm::UpDownPerm; seed::Cube=Cube())
     return Cube(seed.center, EdgeState(final), seed.corners)
 end
 
+# Not all moves are valid for HCube.
+# Only HTurn multiplication is allowed.
+const UPDOWNPERM_MUL = Tuple(Tuple(UpDownPerm(Cube(udp) * Cube(ht)) for ht in ALL_HTURNS) for udp in instances(UpDownPerm))
+Base.:*(udp::UpDownPerm, ht::HTurn) = @inbounds UPDOWNPERM_MUL[udp][ht]
+
+# HCube is a subgroup, so multiplication and inversion are also possible
+function Base.:*(a::UpDownPerm, b::UpDownPerm)
+    aperm = @inbounds LEHMER_TO_PERM_8[a]
+    bperm = @inbounds LEHMER_TO_PERM_8[b]
+    cperm = aperm * bperm
+    return @inbounds UpDownPerm(lehmer_code(cperm))
+end
+
+function Base.inv(a::UpDownPerm)
+    aperm = @inbounds LEHMER_TO_PERM_8[a]
+    cperm = inv(aperm)
+    return @inbounds UpDownPerm(lehmer_code(cperm))
+end
+
