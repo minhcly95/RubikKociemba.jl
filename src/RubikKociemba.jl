@@ -16,6 +16,14 @@ include("edge_ori.jl")
 include("belt_slot.jl")
 include("hcoset.jl")
 
+include("lehmer_code.jl")
+include("corner_perm.jl")
+include("up_down_perm.jl")
+include("belt_perm.jl")
+include("hcube.jl")
+
 include("random.jl")
+
+export HCoset, HCube
 
 end

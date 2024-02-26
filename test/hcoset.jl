@@ -1,4 +1,8 @@
 @testset "HCoset" begin
+    @testset "Identity" begin
+        @test HCoset(Cube()) == HCoset()
+    end
+
     @testset "Invariant under HMove" begin
         for cube in rand(Cube, 100)
             coset = HCoset(cube)
