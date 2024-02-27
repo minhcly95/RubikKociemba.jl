@@ -27,6 +27,7 @@ include("hcube.jl")
 
 include("rotate.jl")
 include("random.jl")
+include("canon.jl")
 
 export HTurn, HSymm
 export HCoset, HCube

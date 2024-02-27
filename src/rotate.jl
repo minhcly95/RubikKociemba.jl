@@ -18,9 +18,10 @@ const HSYMM_EDGEORI = [EdgeOri(hs(Cube(eo))) for hs in ALL_HSYMMS, eo in instanc
 const HSYMM_BELTSLOT = [BeltSlot(hs(Cube(belt))) for hs in ALL_HSYMMS, belt in instances(BeltSlot)]
 const HSYMM_BELTSLOT_ORISHIFT = [EdgeOri(hs(Cube(belt))) for hs in ALL_HSYMMS, belt in instances(BeltSlot)]
 
-(hs::HSymm)(eo::EdgeOri, belt::BeltSlot) = @inbounds (HSYMM_EDGEORI[hs, eo] * HSYMM_BELTSLOT_ORISHIFT[hs, belt], HSYMM_BELTSLOT[hs, belt])
+(hs::HSymm)(eo::EdgeOri, belt::BeltSlot) = @inbounds HSYMM_EDGEORI[hs, eo] * HSYMM_BELTSLOT_ORISHIFT[hs, belt]
+(hs::HSymm)(belt::BeltSlot) = @inbounds HSYMM_BELTSLOT[hs, belt]
 
-(hs::HSymm)(coset::HCoset) = HCoset(hs(coset.corner_ori), hs(coset.edge_ori, coset.belt_slot)...)
+(hs::HSymm)(coset::HCoset) = HCoset(hs(coset.corner_ori), hs(coset.edge_ori, coset.belt_slot), hs(coset.belt_slot))
 
 # HCube rotation
 const HSYMM_CORNERPERM = [CornerPerm(hs(Cube(cp))) for hs in ALL_HSYMMS, cp in instances(CornerPerm)]
