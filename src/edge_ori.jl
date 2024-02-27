@@ -54,3 +54,6 @@ Base.:*(m::AbstractMove, eo::EdgeOri) = EdgeOri(Cube(m) * Cube(eo))
 const EDGEORI_MUL = Tuple(Tuple(Move(ft) * eo for ft in ALL_FACETURNS) for eo in instances(EdgeOri))
 Base.:*(ft::FaceTurn, eo::EdgeOri) = @inbounds EDGEORI_MUL[eo][ft]
 
+# Multiplication of EdgeOri can be done efficiently by xor
+Base.:*(a::EdgeOri, b::EdgeOri) = @inbounds EdgeOri((Int(a) - 1) ⊻ (Int(b) - 1) + 1)
+
