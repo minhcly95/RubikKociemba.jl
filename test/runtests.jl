@@ -12,4 +12,5 @@ import RubikKociemba:
     include("rotate.jl")
     include("canon.jl")
     include("lookup.jl")
+    include("solve.jl")
 end

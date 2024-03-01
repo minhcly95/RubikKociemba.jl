@@ -58,3 +58,7 @@ function Base.inv(a::CornerPerm)
     return @inbounds CornerPerm(lehmer_code(cperm))
 end
 
+# Evenness
+Base.iseven(cp::CornerPerm) = @inbounds iseven(LEHMER_TO_PERM_8[cp])
+Base.isodd(cp::CornerPerm) = @inbounds isodd(LEHMER_TO_PERM_8[cp])
+

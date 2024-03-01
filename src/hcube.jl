@@ -54,3 +54,9 @@ Base.:*(a::HCube, b::HCube) = HCube(
 Base.inv(hc::HCube) = HCube(inv(hc.corner_perm), inv(hc.updown_perm), inv(hc.belt_perm))
 Base.adjoint(hc::HCube) = inv(hc)
 
+# Similar to a Cube, an HCube also has parity.
+# A valid HCube is one that has even combined parity of all its components
+Base.isodd(hc::HCube) = isodd(hc.corner_perm) ⊻ isodd(hc.updown_perm) ⊻ isodd(hc.belt_perm)
+Base.iseven(hc::HCube) = !isodd(hc)
+Base.isvalid(hc::HCube) = iseven(hc)
+

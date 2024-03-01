@@ -71,3 +71,7 @@ function Base.inv(a::UpDownPerm)
     return @inbounds UpDownPerm(lehmer_code(cperm))
 end
 
+# Evenness
+Base.iseven(udp::UpDownPerm) = @inbounds iseven(LEHMER_TO_PERM_8[udp])
+Base.isodd(udp::UpDownPerm) = @inbounds isodd(LEHMER_TO_PERM_8[udp])
+

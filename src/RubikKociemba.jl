@@ -35,7 +35,11 @@ include("phase1_table.jl")
 include("phase2_table.jl")
 include("artifacts.jl")
 
+include("canonseq.jl")
+include("solve_hcube.jl")
+
 export HTurn, HSymm
 export HCoset, HCube
+export solve
 
 end

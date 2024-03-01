@@ -68,3 +68,7 @@ function Base.inv(a::BeltPerm)
     return @inbounds BeltPerm(lehmer_code(cperm))
 end
 
+# Evenness
+Base.iseven(bp::BeltPerm) = @inbounds iseven(LEHMER_TO_PERM_4[bp])
+Base.isodd(bp::BeltPerm) = @inbounds isodd(LEHMER_TO_PERM_4[bp])
+

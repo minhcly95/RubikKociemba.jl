@@ -51,4 +51,14 @@
             @test a == b'
         end
     end
+
+    @testset "Validity" begin
+        @test isvalid(HCube())
+        for hc in rand(HCube, 100)
+            @test isvalid(hc)
+            @test isvalid(Cube(hc))
+            @test isvalid(hc')
+            @test isvalid(hc * rand(HTurn))
+        end
+    end
 end
