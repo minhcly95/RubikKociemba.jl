@@ -5,6 +5,7 @@ Base.rand(rng::AbstractRNG, ::Random.SamplerType{CornerOri}) = CornerOri(rand(rn
 Base.rand(rng::AbstractRNG, ::Random.SamplerType{EdgeOri}) = EdgeOri(rand(rng, 1:N_EDGEORIS))
 Base.rand(rng::AbstractRNG, ::Random.SamplerType{BeltSlot}) = BeltSlot(rand(rng, 1:N_BELTSLOTS))
 
+# An HCoset is always valid since parity is implied
 Base.rand(rng::AbstractRNG, ::Random.SamplerType{HCoset}) = HCoset(rand(rng, CornerOri), rand(rng, EdgeOri), rand(rng, BeltSlot))
 
 Base.rand(rng::AbstractRNG, ::Random.SamplerType{CornerPerm}) = CornerPerm(rand(rng, 1:N_CORNERPERMS))

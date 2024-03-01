@@ -36,6 +36,7 @@ include("phase2_table.jl")
 include("artifacts.jl")
 
 include("canonseq.jl")
+include("solve_hcoset.jl")
 include("solve_hcube.jl")
 
 export HTurn, HSymm

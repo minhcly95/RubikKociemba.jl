@@ -23,8 +23,6 @@ function _solve_hcube_recur(hc::HCube, togo::Integer, last_move::Union{Nothing,H
     (PHASE2_TABLE[hc] > togo) && return false
     # If we found the identity, we're done
     (hc == HCube()) && return true
-    # If we ran out of togo, we're doomed
-    (togo <= 0) && return false
 
     # "nothing" indicates that this is the first move
     next_moves = next_cs_hturn(last_move)
