@@ -1,0 +1,6 @@
+[kociemba_lookup]
+git-tree-sha1 = "2b623079da3841335793a727a52ebbe16352ed37"
+
+    [[kociemba_lookup.download]]
+    url = "https://rubik-kociemba-jl.s3.us-east-2.amazonaws.com/kociemba-lookup.tar.gz"
+    sha256 = "e046929e3bef50eab1ec2bfe0b5d62411b4ef311cedb1a5b1f25ea478a0abace"

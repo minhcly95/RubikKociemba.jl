@@ -3,6 +3,7 @@ module RubikKociemba
 using RubikCore
 using FastPerms
 using Random
+using Pkg.Artifacts
 
 import RubikCore:
     @int_struct, IntStruct,
@@ -28,6 +29,11 @@ include("hcube.jl")
 include("rotate.jl")
 include("random.jl")
 include("canon.jl")
+
+include("nibble_array.jl")
+include("phase1_table.jl")
+include("phase2_table.jl")
+include("artifacts.jl")
 
 export HTurn, HSymm
 export HCoset, HCube

@@ -5,10 +5,12 @@ version = "0.1.0-DEV"
 
 [deps]
 FastPerms = "4f7ee846-71eb-4ef0-b8b4-b98ea9e842ee"
+Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 RubikCore = "a6206385-a85b-45a1-9870-e715cb6a9b8e"
 
 [compat]
+Pkg = "1"
 julia = "1.10"
 
 [extras]
