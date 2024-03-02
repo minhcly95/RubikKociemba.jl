@@ -18,4 +18,14 @@
             @test PHASE2_TABLE[hc] <= length(seq)
         end
     end
+
+    # The most important test of all
+    @testset "General Cube" begin
+        @test isempty(solve(Cube()))
+
+        for cube in rand(Cube, 1000)
+            seq = solve(cube)
+            @test normalize(cube * seq) == Cube()
+        end
+    end
 end

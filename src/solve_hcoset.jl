@@ -9,7 +9,7 @@ function solve(coset::HCoset)
         return seq
     end
     # Should always return a solution
-    error("Expected a solution. Something is wrong.")
+    error("Expected a solution. Something was wrong.")
 end
 
 # Depth-first search subroutine to solve an HCoset.

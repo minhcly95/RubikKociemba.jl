@@ -2,18 +2,18 @@
 const MAX_LENGTH_HCUBE = 18
 
 # Get an HTurn sequence that solve an HCube
-function solve(hc::HCube)
+function solve(hc::HCube; max_length = MAX_LENGTH_HCUBE)
     dist = PHASE2_TABLE[hc]
     seq = HTurn[]
     # Note that PHASE2_TABLE only gives underestimate of the sequence length.
     # In rare cases, this estimate does not match and we need to search for the next depth level.
-    for togo in dist:MAX_LENGTH_HCUBE
+    for togo in dist:max_length
         if _solve_hcube_recur(hc, togo, nothing, seq)
             return reverse!(seq)
         end
     end
-    # Should always return a solution
-    error("Expected a solution. Something is wrong.")
+    # Return nothing if there is no solution
+    return nothing
 end
 
 # Depth-first search subroutine to solve an HCube.
