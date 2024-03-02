@@ -3,6 +3,7 @@ using RubikCore, RubikCore.Literals
 using Test
 
 import RubikKociemba:
+    HTurn, HSymm, HCoset, HCube,
     ALL_HTURNS, ALL_HSYMMS, CornerOri, CornerPerm, canonicalize_hsymm,
     PHASE1_TABLE, PHASE2_TABLE
 

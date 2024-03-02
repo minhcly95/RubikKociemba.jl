@@ -40,8 +40,6 @@ include("solve_hcoset.jl")
 include("solve_hcube.jl")
 include("solve_twophase.jl")
 
-export HTurn, HSymm
-export HCoset, HCube
 export solve
 
 end

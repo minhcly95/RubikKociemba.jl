@@ -1,7 +1,7 @@
 name = "RubikKociemba"
 uuid = "0d8d6bde-c220-446d-9ce6-9f4c0ad5239b"
 authors = ["Bui Quang Minh <minhcly95@outlook.com> and contributors"]
-version = "0.1.0-DEV"
+version = "0.1.0"
 
 [deps]
 FastPerms = "4f7ee846-71eb-4ef0-b8b4-b98ea9e842ee"
